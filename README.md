@@ -2,9 +2,9 @@
 
 **Professional Color Extraction & Analysis Tool**
 
-A Swiss Design-inspired desktop application for extracting dominant colors from images and analyzing their psychological impact using **Goethe's Color Theory** and **Itten's Color Harmonies**.
+A desktop application for extracting dominant colors from images and analyzing their psychological impact using **Goethe's Color Theory** and **Itten's Color Harmonies**.
 
-![FARBDIEB Interface](assets/preview.png)
+![FARBDIEB Interface](Farbdieb-interface.png)
 
 ## ✨ Features
 
