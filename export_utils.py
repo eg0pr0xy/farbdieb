@@ -50,12 +50,25 @@ class SwatchExporter:
     def export_json(colors: List[Dict], filename: str):
         """Export comprehensive color analysis as JSON"""
         try:
+            # Check if oil paint data is available
+            has_oil_paints = any('oil_paints' in color for color in colors)
+            theories = ['Goethe', 'Itten', 'Pantone']
+            if has_oil_paints:
+                theories.append('Oil Paints')
+            
             export_data = {
                 'metadata': {
                     'generator': 'FARBDIEB Color Extraction Tool',
-                    'version': '2.0',
+                    'version': '2.1',
                     'color_count': len(colors),
-                    'theories': ['Goethe', 'Itten', 'Pantone']
+                    'theories': theories,
+                    'features': {
+                        'color_psychology': True,
+                        'color_harmonies': True,
+                        'pantone_matching': True,
+                        'oil_paint_matching': has_oil_paints,
+                        'mixing_recipes': has_oil_paints
+                    }
                 },
                 'colors': colors
             }
@@ -167,4 +180,76 @@ class SwatchExporter:
             return True
         except Exception as e:
             print(f"Error exporting Figma tokens: {e}")
+            return False
+    
+    @staticmethod
+    def export_oil_paint_palette(colors: List[Dict], filename: str):
+        """Export oil paint palette with mixing instructions"""
+        try:
+            with open(filename, 'w', newline='', encoding='utf-8') as csvfile:
+                writer = csv.writer(csvfile)
+                
+                # Header
+                writer.writerow([
+                    'HEX', 'RGB', 'Pantone', 'Ölfarbe', 'Pigment', 'Marke', 'Serie',
+                    'Transparenz', 'Trocknungszeit', 'Lichtechtheit', 'Preiskategorie',
+                    'Mischungsvorschlag', 'Mischungsrezept', 'Maltipps'
+                ])
+                
+                for color_data in colors:
+                    hex_val = color_data['basic']['hex']
+                    rgb_val = color_data['basic']['rgb']
+                    
+                    # Try to get oil paint data
+                    if 'oil_paints' in color_data:
+                        oil_data = color_data['oil_paints']
+                        paint = oil_data.get('closest_pure_paint')
+                        
+                        if paint:
+                            # Main paint info
+                            paint_name = paint.name
+                            pigment = paint.pigment
+                            brand = paint.brand
+                            series = str(paint.series)
+                            opacity = paint.opacity
+                            drying_time = paint.drying_time
+                            lightfastness = f"{paint.lightfastness}/4"
+                            price_category = paint.price_category
+                            
+                            # Mixing suggestions
+                            mixing_suggestion = ""
+                            mixing_recipe = ""
+                            if oil_data.get('suggested_mixtures'):
+                                best_mix = oil_data['suggested_mixtures'][0]
+                                mixing_suggestion = best_mix['name']
+                                components = best_mix['recipe']['components']
+                                ratios = best_mix['recipe']['ratios']
+                                mixing_recipe = '; '.join([f"{comp}: {ratio}" for comp, ratio in zip(components, ratios)])
+                            
+                            # Painting tips (first tip only for CSV)
+                            painting_tips = ""
+                            if oil_data.get('painting_tips'):
+                                painting_tips = oil_data['painting_tips'][0].replace('\n', ' ')
+                            
+                            writer.writerow([
+                                hex_val, rgb_val, '', paint_name, pigment, brand, series,
+                                opacity, drying_time, lightfastness, price_category,
+                                mixing_suggestion, mixing_recipe, painting_tips
+                            ])
+                        else:
+                            # No oil paint match found
+                            writer.writerow([
+                                hex_val, rgb_val, '', 'Keine direkte Entsprechung', '', '', '',
+                                '', '', '', '', '', '', 'Mischung erforderlich'
+                            ])
+                    else:
+                        # No oil paint analysis available
+                        writer.writerow([
+                            hex_val, rgb_val, '', 'Analyse nicht verfügbar', '', '', '',
+                            '', '', '', '', '', '', ''
+                        ])
+            
+            return True
+        except Exception as e:
+            print(f"Error exporting oil paint palette: {e}")
             return False 

@@ -389,6 +389,75 @@ def start_gui():
                                        font=swiss_font_small, fg='#333333', bg='#FFFFFF', wraplength=180)
                 goethe_effect.pack(fill='x', pady=2)
                 
+                # Oil Paint analysis tab (if available)
+                if 'oil_paints' in analysis:
+                    oil_frame = tk.Frame(notebook, bg='#FFFFFF')
+                    notebook.add(oil_frame, text='Ölfarben')
+                    
+                    oil_data = analysis['oil_paints']
+                    
+                    # Closest pure paint
+                    if oil_data['closest_pure_paint']:
+                        paint = oil_data['closest_pure_paint']
+                        
+                        # Paint name and pigment
+                        paint_name = tk.Label(oil_frame, text=f"🎨 {paint.name}", 
+                                            font=('Segoe UI', 9, 'bold'), fg='#1A1A1A', bg='#FFFFFF')
+                        paint_name.pack(fill='x', pady=(5, 2))
+                        
+                        pigment_label = tk.Label(oil_frame, text=f"Pigment: {paint.pigment}", 
+                                               font=swiss_font_small, fg='#666666', bg='#FFFFFF')
+                        pigment_label.pack(fill='x', pady=1)
+                        
+                        # Properties in compact format
+                        properties_text = f"⚫ {paint.opacity} • ⏱️ {paint.drying_time} • ☀️ {paint.lightfastness}/4"
+                        properties_label = tk.Label(oil_frame, text=properties_text, 
+                                                   font=('Segoe UI', 7), fg='#888888', bg='#FFFFFF')
+                        properties_label.pack(fill='x', pady=1)
+                        
+                        # Brand and series
+                        brand_text = f"{paint.brand} • Serie {paint.series} • {paint.price_category}"
+                        brand_label = tk.Label(oil_frame, text=brand_text, 
+                                             font=('Segoe UI', 7), fg='#999999', bg='#FFFFFF')
+                        brand_label.pack(fill='x', pady=(1, 5))
+                        
+                        # Separator
+                        separator = tk.Frame(oil_frame, height=1, bg='#E0E0E0')
+                        separator.pack(fill='x', pady=3)
+                    
+                    # Mixing suggestions (if available)
+                    if oil_data['suggested_mixtures']:
+                        mix_label = tk.Label(oil_frame, text="💫 Mischungsvorschläge:", 
+                                           font=('Segoe UI', 8, 'bold'), fg='#1A1A1A', bg='#FFFFFF')
+                        mix_label.pack(fill='x', pady=(5, 2))
+                        
+                        for mixture in oil_data['suggested_mixtures'][:2]:  # Show top 2
+                            mix_name = tk.Label(oil_frame, text=f"• {mixture['name']}", 
+                                              font=('Segoe UI', 7, 'bold'), fg='#333333', bg='#FFFFFF')
+                            mix_name.pack(fill='x', pady=1)
+                            
+                            # Mixing components
+                            components = mixture['recipe']['components']
+                            ratios = mixture['recipe']['ratios']
+                            mix_recipe = " + ".join([f"{comp} ({ratio})" for comp, ratio in zip(components, ratios)])
+                            
+                            recipe_label = tk.Label(oil_frame, text=mix_recipe, 
+                                                  font=('Segoe UI', 6), fg='#666666', bg='#FFFFFF', wraplength=170)
+                            recipe_label.pack(fill='x', pady=(0, 3))
+                    
+                    # Quick painting tips
+                    if oil_data['painting_tips']:
+                        tips_label = tk.Label(oil_frame, text="💡 Maltipps:", 
+                                            font=('Segoe UI', 8, 'bold'), fg='#1A1A1A', bg='#FFFFFF')
+                        tips_label.pack(fill='x', pady=(5, 2))
+                        
+                        # Show first 2 most important tips
+                        for tip in oil_data['painting_tips'][:2]:
+                            tip_text = tip.replace("🎨 ", "").replace("💡 ", "").replace("⏰ ", "").replace("☀️ ", "")
+                            tip_label = tk.Label(oil_frame, text=f"• {tip_text}", 
+                                                font=('Segoe UI', 6), fg='#555555', bg='#FFFFFF', wraplength=170)
+                            tip_label.pack(fill='x', pady=1)
+                
 
                 
 
@@ -438,6 +507,9 @@ def start_gui():
         
         export_var = tk.StringVar(value="csv")
         
+        # Check if oil paint data is available
+        has_oil_paints = any('oil_paints' in analysis for analysis in stored_comprehensive_analysis) if stored_comprehensive_analysis else False
+        
         formats = [
             ("CSV - Basic colors", "csv"),
             ("JSON - Complete analysis", "json"),
@@ -446,6 +518,10 @@ def start_gui():
             ("SCSS Variables", "scss"),
             ("Figma Design Tokens", "figma")
         ]
+        
+        # Add oil paint export option if data is available
+        if has_oil_paints:
+            formats.append(("Ölfarben-Palette (CSV)", "oil_paint_csv"))
         
         for text, value in formats:
             tk.Radiobutton(export_window, text=text, variable=export_var, value=value,
@@ -460,7 +536,8 @@ def start_gui():
                 "ase": [("Adobe Swatch files", "*.ase")],
                 "css": [("CSS files", "*.css")],
                 "scss": [("SCSS files", "*.scss")],
-                "figma": [("JSON files", "*.json")]
+                "figma": [("JSON files", "*.json")],
+                "oil_paint_csv": [("CSV files", "*.csv")]
             }
             
             file_path = filedialog.asksaveasfilename(
@@ -502,6 +579,9 @@ def start_gui():
                     
                 elif format_type == "figma":
                     success = SwatchExporter.export_figma_tokens(stored_colors, file_path)
+                    
+                elif format_type == "oil_paint_csv":
+                    success = SwatchExporter.export_oil_paint_palette(stored_comprehensive_analysis, file_path)
                 
                 if success:
                     messagebox.showinfo("Export Successful", f"File saved: {file_path}")

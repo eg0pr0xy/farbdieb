@@ -166,6 +166,13 @@ def get_comprehensive_color_analysis(rgb: Tuple[int, int, int]) -> Dict:
     """Get comprehensive color analysis combining all theories"""
     r, g, b = rgb
     
+    # Import oil paint analysis
+    try:
+        from oil_paint_data import rgb_to_oil_paint_match
+        oil_paint_analysis = rgb_to_oil_paint_match(rgb)
+    except ImportError:
+        oil_paint_analysis = None
+    
     analysis = {
         'basic': {
             'hex': f'#{r:02x}{g:02x}{b:02x}'.upper(),
@@ -181,5 +188,9 @@ def get_comprehensive_color_analysis(rgb: Tuple[int, int, int]) -> Dict:
             'analogous': IttenFarbkreis.get_analogous_colors(rgb)
         }
     }
+    
+    # Add oil paint analysis if available
+    if oil_paint_analysis:
+        analysis['oil_paints'] = oil_paint_analysis
     
     return analysis 

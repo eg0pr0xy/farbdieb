@@ -13,6 +13,7 @@ A desktop application for extracting dominant colors from images and analyzing t
 - **Multi-format Support** (JPG, PNG, BMP, GIF)
 - **Responsive Swiss Design** interface
 - **Real-time Image Analysis** with threading
+- **Oil Paint Matching** - Digital-to-analog color translation
 
 ### 🧠 **Color Psychology & Theory**
 - **Goethe's Color Psychology** - Emotion, Character, Effect analysis
@@ -27,6 +28,7 @@ A desktop application for extracting dominant colors from images and analyzing t
 - **CSS Variables** - For web development
 - **SCSS Variables** - For preprocessor workflows  
 - **Figma Design Tokens** - For design system integration
+- **Oil Paint Palette** - Shopping lists with mixing recipes
 
 ### 🎛️ **User Experience**
 - **Keyboard Shortcuts** (Ctrl+O, Ctrl+S, F1, F5)
@@ -61,7 +63,7 @@ python main.py
 1. **Launch FARBDIEB** - Run `python main.py`
 2. **Select Image** - Click "SELECT IMAGE" or press `Ctrl+O`
 3. **Analyze Colors** - Colors are automatically extracted and analyzed
-4. **Explore Analysis** - View formats, Goethe psychology, and Itten harmonies
+4. **Explore Analysis** - View formats, Goethe psychology, Itten harmonies, and oil paints
 5. **Copy Colors** - Click any color value to select, double-click to copy
 6. **Export Results** - Press `Ctrl+S` or click "EXPORT" for professional formats
 
@@ -73,6 +75,7 @@ farbdieb/
 ├── gui.py               # Main GUI interface with Swiss Design
 ├── color_utils.py       # Color extraction algorithms
 ├── color_theory.py      # Goethe & Itten analysis engine
+├── oil_paint_data.py    # Oil paint database and matching algorithms
 ├── export_utils.py      # Professional export formats
 ├── pantone_data.py      # Pantone color matching database
 ├── requirements.txt     # Python dependencies
@@ -90,6 +93,28 @@ farbdieb/
 - **Complementary Colors** - 180° opposite on color wheel
 - **Triadic Relationships** - 120° intervals for balance
 - **Analogous Schemes** - 30° adjacent harmonious colors
+
+### Oil Paint Matching 🎨
+- **Pigment Database** - 28+ professional oil paints with accurate RGB values
+- **Brand Information** - Schmincke, Winsor & Newton, and more
+- **Paint Properties** - Opacity, drying time, lightfastness ratings
+- **Mixing Recipes** - 10+ traditional color mixing formulas
+- **Painting Tips** - Professional advice for each pigment
+- **Cost Analysis** - Student vs. artist vs. professional grade recommendations
+
+## 🎯 Use Cases
+
+### 🎭 **Portrait Artists**
+Extract skin tones from photos and get precise oil paint mixing recipes for realistic flesh tones.
+
+### 🏞️ **Landscape Painters**
+Analyze nature photos to create optimized plein air palettes with minimal tube count.
+
+### 🎓 **Art Educators**
+Generate material lists and mixing exercises for color theory courses.
+
+### 🎨 **Digital Artists Transitioning to Traditional**
+Bridge the gap between digital inspiration and physical painting materials.
 
 ## 🎛️ Keyboard Shortcuts
 
@@ -111,6 +136,7 @@ farbdieb/
 | **CSS Variables** | Web Development | `.css` |
 | **SCSS Variables** | Sass Preprocessing | `.scss` |
 | **Figma Tokens** | Design Systems | `.json` |
+| **Oil Paint Palette** | Traditional Painting, Art Supply Lists | `.csv` |
 
 ## 🛠️ Technical Stack
 
