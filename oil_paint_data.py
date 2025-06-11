@@ -275,39 +275,166 @@ def rgb_to_oil_paint_match(rgb: Tuple[int, int, int]) -> Dict:
         "color_properties": analyze_oil_paint_properties(rgb)
     }
 
+# Spezifische Maltipps für jede Farbe - basierend auf echter Praxis
+SPECIFIC_PAINTING_TIPS = {
+    "Titanweiß": [
+        "Kühlstes Weiß - ideal für moderne Malerei",
+        "Sehr deckend - nur wenig verwenden",
+        "Neigt zum 'Kreideeffekt' - mit Ölmedium verbessern"
+    ],
+    "Zinkweiß": [
+        "Transparenter als Titanweiß - perfekt für Fleischtöne", 
+        "Trocknet sehr langsam - Geduld erforderlich",
+        "Spröde wenn dick aufgetragen - dünn arbeiten"
+    ],
+    "Elfenbeinschwarz": [
+        "Wärmstes Schwarz mit bläulichem Unterton",
+        "Sehr langsame Trocknung - als Untermalung verwenden",
+        "Mischt schöne warme Grautöne mit Weiß"
+    ],
+    "Paynesgrau": [
+        "Fertige Mischung - Zeit sparen beim Mischen",
+        "Kühle Alternative zu reinem Schwarz",
+        "Perfekt für Schatten in Landschaften"
+    ],
+    "Kadmiumrot dunkel": [
+        "Intensivstes Rot - sehr sparsam verwenden",
+        "Giftig - Hände waschen nach Gebrauch",
+        "Nicht mit Ultramarin mischen - wird schmutzig"
+    ],
+    "Kadmiumrot hell": [
+        "Ideal für Grundton von Fleischfarben",
+        "Mit Gelb mischt perfekte Orangetöne",
+        "Teuerste Farbe - nur wenn nötig verwenden"
+    ],
+    "Englischrot": [
+        "Günstige Alternative zu Kadmiumrot",
+        "Sehr lichtstabil - für dauerhafte Werke",
+        "Erdpigment - mischt gut mit allen Farben"
+    ],
+    "Zinnoberrot": [
+        "Traditionelles Rot der Alten Meister",
+        "Tendiert zum Nachdunkeln mit der Zeit",
+        "Sehr deckend - ideal für Grundierungen"
+    ],
+    "Alizarinkarmin": [
+        "Transparentes Rot für Lasuren",
+        "Mischt schöne Violett- und Rosatöne",
+        "Früher lichtunbeständig - moderne Version ist besser"
+    ],
+    "Kadmiumgelb hell": [
+        "Leuchtendste Gelbfärbung verfügbar",
+        "Perfekt für Sonneneffekte und Highlights",
+        "Sehr teuer - für Studien Hansagelb verwenden"
+    ],
+    "Kadmiumgelb mittel": [
+        "Standardgelb für die meisten Zwecke",
+        "Mischt saubere Grün- und Orangetöne",
+        "Hohe Farbkraft - wenig verwenden"
+    ],
+    "Neapelgelb": [
+        "Historische Farbe - warmste Gelbmischung",
+        "Bereits mit Weiß gemischt - sehr deckend",
+        "Ideal für Fleischtöne und warme Lichter"
+    ],
+    "Hansagelb": [
+        "Moderne Alternative zu Kadmiumgelb",
+        "Transparenter und günstiger",
+        "Perfekt für Lasuren und Untermalungen"
+    ],
+    "Ockergelb": [
+        "Günstigstes Gelb - Grundausstattung",
+        "Erdpigment - sehr beständig und sicher",
+        "Perfekt für Untermalungen und warme Schatten"
+    ],
+    "Preußischblau": [
+        "Stärkstes Blau - extrem sparsam verwenden",
+        "Macht aus jedem Grün ein sattes Waldgrün",
+        "Reagiert mit Alkali - nur ölbasierte Medien"
+    ],
+    "Ultramarienblau": [
+        "Klassisches Himmelblau der Renaissance",
+        "Sehr rein - mischt saubere Violett-Töne",
+        "Empfindlich gegen Säuren - vorsichtig handhaben"
+    ],
+    "Coelinblau": [
+        "Perfekt für Himmel und Atmosphäre",
+        "Weniger intensiv als andere Blautöne",
+        "Gute Zwischenfarbe zwischen Grün und Blau"
+    ],
+    "Phthaloblau": [
+        "Sehr intensive Färbekraft",
+        "Tendiert zu 'künstlichem' Aussehen - sparsam verwenden",
+        "Perfekt für moderne, kraftvolle Kompositionen"
+    ],
+    "Viridian": [
+        "Transparentes Grün für Landschaften",
+        "Sehr langsame Trocknung - Geduld erforderlich",
+        "Mischt mit Gelb natürliche Grüntöne"
+    ],
+    "Phthalogrün": [
+        "Intensivstes Grün - tropfenweise verwenden",
+        "Überwältigt schnell andere Farben",
+        "Ideal für moderne Kompositionen"
+    ],
+    "Chromoxidgrün": [
+        "Sehr deckend und beständig",
+        "Erdiger, natürlicher Grünton",
+        "Perfekt für Landschaftsuntermalungen"
+    ],
+    "Umbra gebrannt": [
+        "Universelles Braun für alle Zwecke",
+        "Sehr schnelle Trocknung - als Siccativ nutzen",
+        "Mischt mit Weiß perfekte warme Grautöne"
+    ],
+    "Umbra natur": [
+        "Kälteres Braun mit Grünstich",
+        "Ideal für Schatten in der Landschaft",
+        "Günstige Grundausstattung"
+    ],
+    "Sienna gebrannt": [
+        "Warmes Rotbraun für Herbststimmungen",
+        "Transparente Erdfarbe - gut für Lasuren",
+        "Klassische Farbe für Untermalungen"
+    ],
+    "Sienna natur": [
+        "Orangebraun für warme Landschaftstöne",
+        "Sehr beständiges Erdpigment",
+        "Mischt schöne Orangetöne mit Gelb"
+    ],
+    "Vandyckbraun": [
+        "Dunkelstes Braun - Alternative zu Schwarz",
+        "Sehr transparent - ideal für dunkle Lasuren",
+        "Traditionelle Farbe für Porträtschatten"
+    ],
+    "Ultramarinviolett": [
+        "Transparentes Violett für Schatten",
+        "Mischt mit Rot schöne Purpurtöne",
+        "Empfindlich - nur für Innenräume geeignet"
+    ],
+    "Dioxazinlila": [
+        "Intensivstes Violett verfügbar",
+        "Sehr rein - keine Tendenz zu Grau oder Braun",
+        "Sparsam verwenden - überwältigt schnell"
+    ]
+}
+
 def get_painting_tips(rgb: Tuple[int, int, int], paint: OilPaint) -> List[str]:
-    """Gibt praktische Maltipps für die spezifische Farbe"""
+    """Gibt echte, praxiserprobte Maltipps für die spezifische Farbe"""
+    if paint.name in SPECIFIC_PAINTING_TIPS:
+        return SPECIFIC_PAINTING_TIPS[paint.name]
+    
+    # Fallback für unbekannte Farben
     tips = []
-    
-    # Allgemeine Tipps basierend auf Farbeigenschaften
     if paint.opacity == "transparent":
-        tips.append("🎨 Transparente Farbe - ideal für Lasuren und Übergänge")
-        tips.append("💡 Mit Medium verdünnen für gleichmäßige Schichten")
+        tips.append("Transparente Farbe - ideal für Lasurtechniken")
     elif paint.opacity == "opaque":
-        tips.append("🎨 Deckende Farbe - perfekt für Grundierungen und Highlights")
-        tips.append("💡 Sparsam verwenden, da sehr farbintensiv")
+        tips.append("Deckende Farbe - sparsam verwenden")
     
-    if paint.drying_time == "slow":
-        tips.append("⏰ Lange Trocknungszeit - mehr Zeit für Verblendung")
-        tips.append("🌡️ Trockenbeschleuniger hinzufügen wenn nötig")
-    elif paint.drying_time == "fast":
-        tips.append("⏰ Schnelle Trocknung - zügig arbeiten")
-        tips.append("💧 Mit Verzögerer mischen für mehr Arbeitszeit")
+    if paint.price_category == "professional":
+        tips.append("Professionelle Qualität - höchste Pigmentkonzentration")
     
-    if paint.lightfastness < 3:
-        tips.append("☀️ Lichtempfindlich - für Studien verwenden")
-        tips.append("🛡️ UV-Schutz beim Aufhängen beachten")
-    
-    # Spezielle Pigment-Tipps
-    if "Kadmium" in paint.name:
-        tips.append("⚠️ Kadmiumpigment - nicht mit schwefelhaltigen Farben mischen")
-        tips.append("🧤 Vorsicht beim Umgang, giftig bei Einnahme")
-    elif "Preußisch" in paint.name:
-        tips.append("🔬 Reaktiv mit Alkali - pH-neutrale Grundierung verwenden")
-    elif "Ultramarin" in paint.name:
-        tips.append("🌊 Säureempfindlich - nicht mit sauren Medien mischen")
-    
-    return tips
+    return tips if tips else ["Hochwertige Künstlerfarbe für professionelle Anwendungen"]
 
 def analyze_oil_paint_properties(rgb: Tuple[int, int, int]) -> Dict:
     """Analysiert die maltechnischen Eigenschaften einer Farbe"""
