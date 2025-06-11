@@ -6,6 +6,46 @@ A desktop application for extracting dominant colors from images and analyzing t
 
 ![FARBDIEB Interface](Farbdieb-interface.png)
 
+## 🔄 Workflow Overview
+
+```mermaid
+graph TB
+    A["📸 Image Upload"] --> B["🔍 Color Extraction<br/>K-means Clustering"]
+    B --> C["🎨 Multi-Theory Analysis"]
+    
+    C --> D["📊 Basic Formats<br/>HEX • RGB • HSL<br/>CMYK • LAB"]
+    C --> E["🧠 Goethe Psychology<br/>Emotion • Character • Effect"]
+    C --> F["🎯 Itten Harmonies<br/>Complementary • Triadic<br/>Analogous"]
+    C --> G["🖌️ Oil Paint Matching<br/>Pigments • Mixing • Tips"]
+    C --> H["🏷️ Pantone Mapping<br/>Professional Standards"]
+    
+    G --> I["🎨 Pure Pigments<br/>28+ Professional Colors"]
+    G --> J["🧪 Mixing Recipes<br/>Traditional Formulas"]
+    G --> K["💡 Painting Tips<br/>Technical Advice"]
+    G --> L["🏭 Brand Database<br/>Schmincke • W&N • etc."]
+    
+    D --> M["📤 Professional Export"]
+    E --> M
+    F --> M
+    G --> M
+    H --> M
+    
+    M --> N["💾 7 Export Formats"]
+    N --> O["📊 CSV • JSON • Adobe ASE"]
+    N --> P["🌐 CSS • SCSS • Figma"]
+    N --> Q["🎨 Oil Paint Palette"]
+    
+    style A fill:#e3f2fd
+    style C fill:#fff3e0
+    style G fill:#f3e5f5
+    style I fill:#ffebee
+    style J fill:#ffebee
+    style K fill:#ffebee
+    style L fill:#ffebee
+    style M fill:#e8f5e8
+    style Q fill:#fff8e1
+```
+
 ## ✨ Features
 
 ### 🎯 **Core Functionality**
